@@ -5,7 +5,7 @@ import com.example.mvvmappclass.db.ArticleDatabase
 import retrofit2.Retrofit
 
 class NewsRepository(
-    val db : ArticleDatabase
+    val db: ArticleDatabase
 ) {
 
     suspend fun getBreakingNews(
@@ -13,6 +13,11 @@ class NewsRepository(
         pageNumber: Int
     ) = RetrofitInstance.api.getBreakingNews(countryCode, pageNumber)
 
+
+    suspend fun searchNews(
+        query: String,
+        pageNumber: Int
+    ) = RetrofitInstance.api.searchForNews(searchQuery = query, pageNumber = pageNumber)
 
 
 }
