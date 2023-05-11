@@ -4,7 +4,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
 
-@Entity(
+@Entity
+    (
     tableName = "article"
 )
 data class Article(

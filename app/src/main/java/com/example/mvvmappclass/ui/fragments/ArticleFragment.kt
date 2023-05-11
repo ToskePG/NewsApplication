@@ -11,6 +11,7 @@ import com.example.mvvmappclass.R
 import com.example.mvvmappclass.databinding.FragmentArticleBinding
 import com.example.mvvmappclass.ui.NewsActivity
 import com.example.mvvmappclass.ui.NewsViewModel
+import com.google.android.material.snackbar.Snackbar
 
 
 class ArticleFragment : Fragment(R.layout.fragment_article) {
@@ -37,6 +38,11 @@ class ArticleFragment : Fragment(R.layout.fragment_article) {
             article.url?.let {
                 loadUrl(it)
             }
+        }
+
+        binding.fab.setOnClickListener {
+            viewModel.saveArticle(article)
+            Snackbar.make(view, "Article save successfully", Snackbar.LENGTH_LONG).show()
         }
 
     }

@@ -11,7 +11,7 @@ import com.example.mvvmappclass.model.Article
 @Dao
 interface ArticleDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun upsertArticle(article: Article): Long
 
     @Query("SELECT * FROM article")
