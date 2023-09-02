@@ -24,6 +24,7 @@ class NewsViewModel(
     init {
         getBreakingNews("us")
     }
+
     fun getBreakingNews(countryCode: String) = viewModelScope.launch {
         breakingNews.postValue(Resource.Loading())
         val response = newsRepository.getBreakingNews(countryCode, breakingNewsPage)
@@ -54,6 +55,4 @@ class NewsViewModel(
     fun deleteArticle(article: Article) = viewModelScope.launch {
         newsRepository.deleteArticle(article)
     }
-
-
 }
