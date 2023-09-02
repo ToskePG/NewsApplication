@@ -1,32 +1,32 @@
 package com.example.mvvmappclass.ui.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mvvmappclass.R
 import com.example.mvvmappclass.adapters.NewsAdapter
 import com.example.mvvmappclass.databinding.FragmentBreakingNewsBinding
+import com.example.mvvmappclass.model.Article
 import com.example.mvvmappclass.ui.NewsActivity
 import com.example.mvvmappclass.ui.NewsViewModel
 import com.example.mvvmappclass.util.Resource
 
 class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
     private lateinit var binding: FragmentBreakingNewsBinding
-    lateinit var viewModel: NewsViewModel
-    lateinit var newsAdapter: NewsAdapter
-
-    val TAG = "BreakingNewsFragment"
+    private lateinit var viewModel: NewsViewModel
+    private lateinit var newsAdapter: NewsAdapter
+    private val tag = "BreakingNewsFragment"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentBreakingNewsBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -36,16 +36,18 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
         viewModel = (activity as NewsActivity).viewModel
         setUpRecyclerView()
 
-        newsAdapter.setOnItemClickListener {
-            val bundle = Bundle().apply {
-                putSerializable("article", it)
+        newsAdapter.setOnItemClickListener { article->
+            if(article.url == null){
+                showToast(requireContext(), "Can't access this article right now")
+            }else if(article.content == null || article.title == null
+                || article.content == "" ||  article.title == "" || article.description == null){
+                showToast(requireContext(), "No additional info about this article")
+            }else{
+                navigateToArticle(article)
             }
-            findNavController().navigate(
-                R.id.action_breakingNewsFragment2_to_articleFragment, bundle
-            )
         }
 
-        viewModel.breakingNews.observe(viewLifecycleOwner, Observer { response ->
+        viewModel.breakingNews.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Success -> {
                     hideProgressBar()
@@ -56,8 +58,8 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
 
                 is Resource.Error -> {
                     hideProgressBar()
-                    response.message?.let { message ->
-                        Log.d(TAG, "An error occured: $message")
+                    response.message?.let { errorMessage ->
+                        logError(errorMessage)
                     }
                 }
 
@@ -65,10 +67,13 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
                     showProgressBar()
                 }
             }
-        })
+        }
 
     }
 
+    private fun logError(message: String){
+        Log.d(tag, "An error occurred: $message")
+    }
 
     private fun showProgressBar() {
         binding.paginationProgressBar.visibility = View.VISIBLE
@@ -78,13 +83,22 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
         binding.paginationProgressBar.visibility = View.INVISIBLE
     }
 
-
     private fun setUpRecyclerView() {
         newsAdapter = NewsAdapter()
-        binding.rvBreakingNews?.apply {
+        binding.rvBreakingNews.apply {
             adapter = newsAdapter
             layoutManager = LinearLayoutManager(activity)
         }
     }
 
+    private fun showToast(context: Context, message: String){
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+    }
+
+    private fun navigateToArticle(article: Article){
+        val bundle = Bundle().apply {
+            putSerializable("article", article)
+        }
+        findNavController().navigate(R.id.breakingNewsToSingleArticle, bundle)
+    }
 }
