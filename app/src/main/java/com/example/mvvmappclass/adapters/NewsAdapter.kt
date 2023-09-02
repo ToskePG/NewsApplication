@@ -37,31 +37,29 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
         )
     }
 
-    override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
-        val article = differ.currentList[position]
-        if(article.urlToImage == null){
-            holder.binding.ivArticleImage.setImageResource(R.drawable.news)
-        }else{
-            holder.binding.apply {
-                Glide.with(ivArticleImage.context).load(article.urlToImage).into(ivArticleImage)
-                tvSource.text = article.source?.name
-                tvTitle.text = article.title
-                tvDescription.text = article.description
-                tvPublishedAt.text = article.publishedAt
-                holder.itemView.setOnClickListener {
-                    onItemClickListener?.let { it(article) }
-                }
-            }
-        }
-    }
+    override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) = bindArticle(differ.currentList[position], holder)
 
-    override fun getItemCount(): Int {
-        return differ.currentList.size
-    }
+    override fun getItemCount(): Int = differ.currentList.size
 
     private var onItemClickListener: ((Article) -> Unit)? = null
-    
+
     fun setOnItemClickListener(listener: (Article) -> Unit) {
         onItemClickListener = listener
+    }
+
+    private fun bindArticle(article: Article, holder: ArticleViewHolder){
+        val message = "No information about source of this article. "
+        holder.binding.apply {
+            article.urlToImage?.let { imageUrl ->
+                Glide.with(ivArticleImage.context).load(imageUrl).into(ivArticleImage)
+            } ?: ivArticleImage.setImageResource(R.drawable.news)
+            tvSource.text = article.source?.name ?: message
+            tvTitle.text = article.title
+            tvDescription.text = article.description
+            tvPublishedAt.text = article.publishedAt
+            holder.itemView.setOnClickListener {
+                onItemClickListener?.let { it(article) }
+            }
+        }
     }
 }
