@@ -105,15 +105,24 @@ class SearchNewsFragment : Fragment(R.layout.fragment_search_news) {
     }
 
     private fun navigateToArticle(article: Article){
-        val message = getString(R.string.no_additional_data_for_this_article)
-        if(article.description == null ||
-            article.url == null || article.content == null || article.title == null){
-            message.showToast(requireContext())
+        if(article.url == null){
+            showToast(requireContext(), "Can't access this article right now")
+        }else if(article.content == null || article.title == null
+            || article.content == "" ||  article.title == "" || article.description == null
+            || article.urlToImage == null || article.urlToImage =="" || article.source == null){
+            showToast(requireContext(), "No additional info about this article")
         }else{
-            val bundle = Bundle().apply {
-                putSerializable("article", article)
+            val message = getString(R.string.no_additional_data_for_this_article)
+            article.source.id = 0
+            if(article.description == null ||
+                article.url == null || article.content == null || article.title == null){
+                message.showToast(requireContext())
+            }else{
+                val bundle = Bundle().apply {
+                    putSerializable("article", article)
+                }
+                findNavController().navigate(R.id.searchToSingleArticle, bundle)
             }
-            findNavController().navigate(R.id.savedToSingleArticle, bundle)
         }
     }
 

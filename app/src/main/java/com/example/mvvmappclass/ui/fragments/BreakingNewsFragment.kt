@@ -42,10 +42,10 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
             }else if(article.content == null || article.title == null
                 || article.content == "" ||  article.title == "" || article.description == null
                 || article.urlToImage == null || article.urlToImage =="" || article.source == null
-                || article.source.id == null || article.source.name == null || article.author == null
-                || article.publishedAt == null || article == null){
+                || article.author == null || article.publishedAt == null){
                 showToast(requireContext(), "No additional info about this article")
             }else{
+                article.source.id = 0
                 navigateToArticle(article)
             }
         }
