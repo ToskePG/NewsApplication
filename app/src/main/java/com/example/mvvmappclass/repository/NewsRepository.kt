@@ -3,10 +3,9 @@ package com.example.mvvmappclass.repository
 import com.example.mvvmappclass.api.RetrofitInstance
 import com.example.mvvmappclass.db.ArticleDatabase
 import com.example.mvvmappclass.model.Article
-import retrofit2.Retrofit
 
 class NewsRepository(
-    val db: ArticleDatabase
+    val database: ArticleDatabase
 ) {
 
     suspend fun getBreakingNews(
@@ -19,11 +18,11 @@ class NewsRepository(
     ) = RetrofitInstance.api.searchForNews(searchQuery = query, pageNumber = pageNumber)
 
 
-    suspend fun upsert(article: Article) = db.getArticleDao().upsertArticle(article)
+    suspend fun upsert(article: Article) = database.getArticleDao().upsertArticle(article)
 
-    fun getSavedNews() = db.getArticleDao().getAllArticles()
+    fun getSavedNews() = database.getArticleDao().getAllArticles()
 
-    suspend fun deleteArticle(article: Article) = db.getArticleDao().deleteArticle(article)
+    suspend fun deleteArticle(article: Article) = database.getArticleDao().deleteArticle(article)
 
 
 }
