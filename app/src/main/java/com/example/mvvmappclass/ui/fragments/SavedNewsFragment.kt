@@ -41,7 +41,7 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news) {
         newsAdapter.setOnItemClickListener { article->
             navigateToArticle(article)
         }
-        
+
         val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.UP or ItemTouchHelper.DOWN,
             ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
