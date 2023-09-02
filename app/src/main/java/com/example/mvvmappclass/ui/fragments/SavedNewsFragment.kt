@@ -1,12 +1,12 @@
 package com.example.mvvmappclass.ui.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mvvmappclass.R
 import com.example.mvvmappclass.adapters.NewsAdapter
 import com.example.mvvmappclass.databinding.FragmentSavedNewsBinding
+import com.example.mvvmappclass.model.Article
 import com.example.mvvmappclass.ui.NewsActivity
 import com.example.mvvmappclass.ui.NewsViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -21,39 +22,26 @@ import com.google.android.material.snackbar.Snackbar
 
 class SavedNewsFragment : Fragment(R.layout.fragment_saved_news) {
 
-    lateinit var viewModel: NewsViewModel
-
-    lateinit var newsAdapter: NewsAdapter
-
+    private lateinit var viewModel: NewsViewModel
+    private lateinit var newsAdapter: NewsAdapter
     private lateinit var binding: FragmentSavedNewsBinding
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentSavedNewsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         viewModel = (activity as NewsActivity).viewModel
         setupRecyclerView()
 
-
-
-        newsAdapter.setOnItemClickListener {
-            val bundle = Bundle().apply {
-                putSerializable("article", it)
-            }
-            findNavController().navigate(
-                R.id.action_savedNewsFragment2_to_articleFragment, bundle
-            )
+        newsAdapter.setOnItemClickListener { article->
+            navigateToArticle(article)
         }
-
-
+        
         val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.UP or ItemTouchHelper.DOWN,
             ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
@@ -67,15 +55,11 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news) {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val message = getString(R.string.successfully_deleted_this_article)
                 val position = viewHolder.adapterPosition
                 val article = newsAdapter.differ.currentList[position]
                 viewModel.deleteArticle(article)
-                Snackbar.make(view, "Successfully deleted article", Snackbar.LENGTH_LONG).apply {
-                    setAction("Undo") {
-                        viewModel.saveArticle(article)
-                    }
-                    show()
-                }
+                message.showSnackBar(view, article)
             }
         }
 
@@ -83,9 +67,9 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news) {
             attachToRecyclerView(binding.rvSavedNews)
         }
 
-        viewModel.getSavedNews().observe(viewLifecycleOwner, Observer { articles ->
+        viewModel.getSavedNews().observe(viewLifecycleOwner) { articles ->
             newsAdapter.differ.submitList(articles)
-        })
+        }
 
     }
 
@@ -98,4 +82,29 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news) {
         }
     }
 
+    private fun String.showSnackBar(view: View, article: Article){
+        Snackbar.make(view, this, Snackbar.LENGTH_LONG).apply {
+            setAction("Undo") {
+                viewModel.saveArticle(article)
+            }
+            show()
+        }
+    }
+
+    private fun navigateToArticle(article: Article){
+        val message = getString(R.string.no_additional_data_for_this_article)
+        if(article.description == null ||
+            article.url == null || article.content == null || article.title == null){
+            message.showToast(requireContext())
+        }else{
+            val bundle = Bundle().apply {
+                putSerializable("article", article)
+            }
+            findNavController().navigate(R.id.savedToSingleArticle, bundle)
+        }
+    }
+
+    private fun String.showToast(context: Context){
+        Toast.makeText(context, this, Toast.LENGTH_SHORT).show()
+    }
 }

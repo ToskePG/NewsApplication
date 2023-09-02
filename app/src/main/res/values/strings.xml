@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">NewsPriprema</string>
+    <string name="successfully_deleted_this_article">Successfully deleted this article</string>
+    <string name="no_additional_data_for_this_article">No additional data for this article</string>
 </resources>
