@@ -39,39 +39,7 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
 
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
         val article = differ.currentList[position]
-        val sourceMessage = "No information about the source"
-        if(article.urlToImage == null){
-            holder.binding.apply {
-                ivArticleImage.setImageResource(R.drawable.news)
-                if(article.source == null){
-                    tvSource.text = sourceMessage
-                    holder.itemView.setOnClickListener {
-                        onItemClickListener?.let { itemView->
-                            itemView(article) }
-                    }
-                }else{
-                    tvSource.text = article.source.name
-                    tvDescription.text = article.description
-                    tvTitle.text = article.title
-                    tvPublishedAt.text = article.publishedAt
-                    holder.itemView.setOnClickListener {
-                        onItemClickListener?.let { itemView->
-                            itemView(article) }
-                    }
-                }
-            }
-        }else{
-            holder.binding.apply {
-                Glide.with(ivArticleImage.context).load(article.urlToImage).into(ivArticleImage)
-                tvSource.text = article.source?.name
-                tvTitle.text = article.title
-                tvDescription.text = article.description
-                tvPublishedAt.text = article.publishedAt
-                holder.itemView.setOnClickListener {
-                    onItemClickListener?.let { it(article) }
-                }
-            }
-        }
+        bindArticle(article, holder)
     }
 
     override fun getItemCount(): Int {
@@ -82,5 +50,21 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
 
     fun setOnItemClickListener(listener: (Article) -> Unit) {
         onItemClickListener = listener
+    }
+
+    private fun bindArticle(article: Article, holder: ArticleViewHolder){
+        val message = "No information about source of this article. "
+        holder.binding.apply {
+            article.urlToImage?.let { imageUrl ->
+                Glide.with(ivArticleImage.context).load(imageUrl).into(ivArticleImage)
+            } ?: ivArticleImage.setImageResource(R.drawable.news)
+            tvSource.text = article.source?.name ?: message
+            tvTitle.text = article.title
+            tvDescription.text = article.description
+            tvPublishedAt.text = article.publishedAt
+            holder.itemView.setOnClickListener {
+                onItemClickListener?.let { it(article) }
+            }
+        }
     }
 }
