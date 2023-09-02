@@ -12,7 +12,7 @@ import com.example.mvvmappclass.model.Article
 interface ArticleDao {
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    suspend fun upsertArticle(article: Article): Long
+    suspend fun saveArticle(article: Article): Long
 
     @Query("SELECT * FROM article")
     fun getAllArticles(): LiveData<List<Article>>
