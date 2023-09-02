@@ -8,10 +8,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mvvmappclass.R
 import com.example.mvvmappclass.adapters.NewsAdapter
 import com.example.mvvmappclass.databinding.FragmentSearchNewsBinding
+import com.example.mvvmappclass.model.Article
 import com.example.mvvmappclass.ui.NewsActivity
 import com.example.mvvmappclass.ui.NewsViewModel
 import com.example.mvvmappclass.util.Constants.Companion.SEARCH_NEWS_TIME_DELAY
@@ -72,6 +74,10 @@ class SearchNewsFragment : Fragment(R.layout.fragment_search_news) {
                 }
             }
         }
+
+        newsAdapter.setOnItemClickListener { article ->
+            navigateToArticle(article)
+        }
     }
 
     private fun hideProgressBar() {
@@ -98,4 +104,20 @@ class SearchNewsFragment : Fragment(R.layout.fragment_search_news) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 
+    private fun navigateToArticle(article: Article){
+        val message = getString(R.string.no_additional_data_for_this_article)
+        if(article.description == null ||
+            article.url == null || article.content == null || article.title == null){
+            message.showToast(requireContext())
+        }else{
+            val bundle = Bundle().apply {
+                putSerializable("article", article)
+            }
+            findNavController().navigate(R.id.savedToSingleArticle, bundle)
+        }
+    }
+
+    private fun String.showToast(context: Context){
+        Toast.makeText(context, this, Toast.LENGTH_SHORT).show()
+    }
 }
