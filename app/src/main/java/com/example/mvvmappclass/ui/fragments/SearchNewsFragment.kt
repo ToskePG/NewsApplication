@@ -1,5 +1,6 @@
 package com.example.mvvmappclass.ui.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -38,7 +39,7 @@ class SearchNewsFragment : Fragment(R.layout.fragment_search_news) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = (activity as NewsActivity).viewModel
         setupRecyclerView()
-        
+
         var job: Job? = null
         binding.etSearch.addTextChangedListener { editable ->
             job?.cancel()
@@ -61,10 +62,8 @@ class SearchNewsFragment : Fragment(R.layout.fragment_search_news) {
 
                 is Resource.Error -> {
                     hideProgressBar()
-                    response.message?.let { message ->
-                        Toast.makeText(
-                            activity, "An error has occurred: $message", Toast.LENGTH_LONG
-                        ).show()
+                    response.message?.let { errorMessage ->
+                        showToast(requireContext(), "An error has occurred $errorMessage")
                     }
                 }
 
@@ -73,8 +72,6 @@ class SearchNewsFragment : Fragment(R.layout.fragment_search_news) {
                 }
             }
         }
-
-
     }
 
     private fun hideProgressBar() {
@@ -97,5 +94,8 @@ class SearchNewsFragment : Fragment(R.layout.fragment_search_news) {
         }
     }
 
+    private fun showToast(context: Context, message: String){
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+    }
 
 }

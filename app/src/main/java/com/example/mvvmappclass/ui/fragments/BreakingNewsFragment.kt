@@ -40,7 +40,10 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
             if(article.url == null){
                 showToast(requireContext(), "Can't access this article right now")
             }else if(article.content == null || article.title == null
-                || article.content == "" ||  article.title == "" || article.description == null){
+                || article.content == "" ||  article.title == "" || article.description == null
+                || article.urlToImage == null || article.urlToImage =="" || article.source == null
+                || article.source.id == null || article.source.name == null || article.author == null
+                || article.publishedAt == null || article == null){
                 showToast(requireContext(), "No additional info about this article")
             }else{
                 navigateToArticle(article)
