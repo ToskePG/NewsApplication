@@ -2,4 +2,7 @@
     <string name="app_name">NewsPriprema</string>
     <string name="successfully_deleted_this_article">Successfully deleted this article</string>
     <string name="no_additional_data_for_this_article">No additional data for this article</string>
+    <string name="click_here_to_search">Click here to Search</string>
+    <string name="you_have_no_articles_saved">You have no articles saved!</string>
+    <string name="no_saved_news">No Saved News</string>
 </resources>

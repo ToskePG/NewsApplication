@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -69,11 +70,19 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news) {
 
         viewModel.getSavedNews().observe(viewLifecycleOwner) { articles ->
             newsAdapter.differ.submitList(articles)
+            binding.apply {
+                rvSavedNews.isVisible = articles.isNotEmpty()
+                ivEmptyState.isVisible = articles.isEmpty()
+                tvEmptyStateText.isVisible = articles.isEmpty()
+                btnSearchNews.isVisible = articles.isEmpty()
+            }
         }
 
+        binding.btnSearchNews.setOnClickListener{
+            navigateToSearchNews()
+        }
     }
-
-
+    
     private fun setupRecyclerView() {
         newsAdapter = NewsAdapter()
         binding.rvSavedNews.apply {
@@ -106,5 +115,9 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news) {
 
     private fun String.showToast(context: Context){
         Toast.makeText(context, this, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun navigateToSearchNews(){
+        findNavController().navigate(R.id.savedToSearchNews)
     }
 }
