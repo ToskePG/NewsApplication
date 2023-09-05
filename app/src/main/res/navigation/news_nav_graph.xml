@@ -18,6 +18,9 @@
         <action
             android:id="@+id/savedToSingleArticle"
             app:destination="@id/articleFragment" />
+        <action
+            android:id="@+id/savedToSearchNews"
+            app:destination="@id/searchNewsFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchNewsFragment"
