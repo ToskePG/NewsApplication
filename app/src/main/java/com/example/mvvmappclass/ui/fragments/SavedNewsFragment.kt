@@ -82,7 +82,7 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news) {
             navigateToSearchNews()
         }
     }
-    
+
     private fun setupRecyclerView() {
         newsAdapter = NewsAdapter()
         binding.rvSavedNews.apply {
