@@ -38,12 +38,13 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
 
         newsAdapter.setOnItemClickListener { article->
             if(article.url == null){
-                showToast(requireContext(), "Can't access this article right now")
+                showToast(requireContext(), getString(R.string.can_t_access_this_article_right_now))
             }else if(article.content == null || article.title == null
                 || article.content == "" ||  article.title == "" || article.description == null
                 || article.urlToImage == null || article.urlToImage =="" || article.source == null
                 || article.author == null || article.publishedAt == null){
-                showToast(requireContext(), "No additional info about this article")
+                showToast(requireContext(),
+                    getString(R.string.no_additional_info_about_this_article))
             }else{
                 article.source.id = 0
                 navigateToArticle(article)

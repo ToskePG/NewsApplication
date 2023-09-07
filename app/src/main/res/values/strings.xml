@@ -5,4 +5,6 @@
     <string name="click_here_to_search">Click here to Search</string>
     <string name="you_have_no_articles_saved">You have no articles saved!</string>
     <string name="no_saved_news">No Saved News</string>
+    <string name="can_t_access_this_article_right_now">Can\'t access this article right now</string>
+    <string name="no_additional_info_about_this_article">No additional info about this article</string>
 </resources>

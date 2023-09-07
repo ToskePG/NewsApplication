@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.mvvmappclass.repository.NewsRepository
 
+@Suppress("UNCHECKED_CAST")
 class NewsViewModelProviderFactory(
     val newsRepository: NewsRepository
 ) : ViewModelProvider.Factory {
