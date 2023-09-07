@@ -20,7 +20,9 @@
             app:destination="@id/articleFragment" />
         <action
             android:id="@+id/savedToSearchNews"
-            app:destination="@id/searchNewsFragment" />
+            app:destination="@id/searchNewsFragment"
+            app:popUpTo="@id/savedNewsFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
     <fragment
         android:id="@+id/searchNewsFragment"

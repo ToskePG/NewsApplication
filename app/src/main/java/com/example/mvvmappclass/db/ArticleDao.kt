@@ -17,9 +17,6 @@ interface ArticleDao {
     @Query("SELECT * FROM article")
     fun getAllArticles(): LiveData<List<Article>>
 
-
     @Delete
     suspend fun deleteArticle(article: Article)
-
-
 }

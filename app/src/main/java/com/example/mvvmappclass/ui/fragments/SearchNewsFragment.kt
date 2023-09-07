@@ -2,6 +2,7 @@ package com.example.mvvmappclass.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ import com.example.mvvmappclass.databinding.FragmentSearchNewsBinding
 import com.example.mvvmappclass.model.Article
 import com.example.mvvmappclass.ui.NewsActivity
 import com.example.mvvmappclass.ui.NewsViewModel
+import com.example.mvvmappclass.util.Constants
 import com.example.mvvmappclass.util.Constants.Companion.SEARCH_NEWS_TIME_DELAY
 import com.example.mvvmappclass.util.Resource
 import kotlinx.coroutines.Job

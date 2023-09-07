@@ -9,7 +9,7 @@ import com.example.mvvmappclass.model.Article
 
 
 @Database(
-    entities = [Article::class], version = 1
+    entities = [Article::class], version = 1, exportSchema = false
 )
 @TypeConverters(Converters::class)
 abstract class ArticleDatabase : RoomDatabase() {
@@ -26,8 +26,6 @@ abstract class ArticleDatabase : RoomDatabase() {
             instance ?: createDatabase(context).also { instance = it }
         }
 
-//        ?: -> if(instance == null)
-//
         private fun createDatabase(context: Context) = Room.databaseBuilder(
             context.applicationContext, ArticleDatabase::class.java, "article_db.db"
         ).build()

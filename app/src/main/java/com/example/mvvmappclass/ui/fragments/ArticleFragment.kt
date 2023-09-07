@@ -17,12 +17,12 @@ import com.google.android.material.snackbar.Snackbar
 class ArticleFragment : Fragment(R.layout.fragment_article) {
 
     private lateinit var binding: FragmentArticleBinding
-    lateinit var viewModel: NewsViewModel
+    private lateinit var viewModel: NewsViewModel
     val args: ArticleFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentArticleBinding.inflate(layoutInflater, container, false)
         return binding.root
     }

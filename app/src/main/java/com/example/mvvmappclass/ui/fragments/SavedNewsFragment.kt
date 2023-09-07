@@ -20,7 +20,6 @@ import com.example.mvvmappclass.ui.NewsActivity
 import com.example.mvvmappclass.ui.NewsViewModel
 import com.google.android.material.snackbar.Snackbar
 
-
 class SavedNewsFragment : Fragment(R.layout.fragment_saved_news) {
 
     private lateinit var viewModel: NewsViewModel
@@ -75,11 +74,10 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news) {
                 ivEmptyState.isVisible = articles.isEmpty()
                 tvEmptyStateText.isVisible = articles.isEmpty()
                 btnSearchNews.isVisible = articles.isEmpty()
+                btnSearchNews.setOnClickListener{
+                    navigateToSearchNews()
+                }
             }
-        }
-
-        binding.btnSearchNews.setOnClickListener{
-            navigateToSearchNews()
         }
     }
 
